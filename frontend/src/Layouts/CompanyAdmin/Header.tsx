@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from 'react'
 import { IoArrowBackSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { EnterAnimation } from '../../Animations/EnterAnimation';
+import { UseCompanyZutand } from '../../zustand/CompanyAdminZustand';
 
-export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: string | undefined, filterTableData:  (e:React.ChangeEvent<HTMLInputElement>)=> void, searchText: string}> = ({ currentPage, title, filterTableData, searchText }) => {
+export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: string | undefined, filterTableData: (e: React.ChangeEvent<HTMLInputElement>) => void, searchText: string }> = ({ currentPage, title, filterTableData, searchText }) => {
+  const { setIsEdit } = UseCompanyZutand()
   const navigate = useNavigate()
   const goBackCompany = () => {
     navigate("/companies")
@@ -13,6 +15,9 @@ export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: s
     searchRef.current?.focus()
   }, [])
 
+  const handleAdd = () => {
+    setIsEdit({ mode: "add", data: [] })
+  }
   return <section className={`bg-white p-3 sticky top-0 z-1  ${title != "Upload Documents" ? "py-5" : "py-3"} rounded`}>
     <section className='flex gap-3 items-center justify-between'>
       <div className='flex gap-2 justify-center items-center'>
@@ -20,7 +25,7 @@ export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: s
         <h4 className='text-black  text-xl font-bold'>{title || "Instance for company"}</h4>
       </div>
       <div>
-        <EnterAnimation>{currentPage == 'CompaniesPage' && <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary">Add Company</label>}</EnterAnimation>
+        <EnterAnimation>{currentPage == 'CompaniesPage' && <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={handleAdd}>Add Company</label>}</EnterAnimation>
       </div>
     </section>
     <section className='w-full mt-3'>
@@ -39,7 +44,7 @@ export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: s
               <path d="m21 21-4.3-4.3"></path>
             </g>
           </svg>
-          <input type="search" required placeholder={title == "Companies"? "Search company name": "Search instances..."} ref={searchRef}  onChange={(e)=> filterTableData(e)} value={searchText}/>
+          <input type="search" required placeholder={title == "Companies" ? "Search company name" : "Search instances..."} ref={searchRef} onChange={(e) => filterTableData(e)} value={searchText} />
         </label>}
       </div>
     </section>

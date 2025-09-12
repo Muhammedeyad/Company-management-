@@ -5,8 +5,9 @@ export const UseCompanyZutand = create<
 ZustandTypes>((set) => ({
     selectedTab: "uploaddocuments",
     setSelectedTab: (selectedTab: string) => set({ selectedTab: selectedTab }),
-    isEdit: "",
-    setIsEdit: (isEdit) => set({ isEdit: isEdit })
+    isEdit: {mode:"", data: [] },
+    setIsEdit: (isEdit) => set({ isEdit: {mode: isEdit?.mode, data:isEdit?.data } })
   }))
 
 
+ 
