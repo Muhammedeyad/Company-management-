@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #F3F4F6;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+.bg-blue-color {
+    background-color: #7C86FF;
+}
+
+.bg-violet-color {
+    background-color: #5445F9;
+}
+
+.bg-gray-color {
+    background-color: rgb(240, 240, 254);
+}
