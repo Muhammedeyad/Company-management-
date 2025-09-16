@@ -7,16 +7,22 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../Common/Button';
 import { EnterAnimation } from '../../../Animations/EnterAnimation';
 import { UseCompanyZutand } from '../../../zustand/CompanyAdminZustand';
+import { UseDispatchHook } from '../../../hooks/CompanyAdmin/ReduxStoreHook/ReduxStoreHook';
+import { deleteCompany } from '../../../features/CompanyAdmin/TableFeatures/TableSlice';
+
 // import type { CompanyTableColumnType, CompanyTableDataType, InstanceTableColumnType, InstanceTableDataType } from '../../../types/CompanyAdmin/TableTypes';
 
 
 export const TableRow: React.FC<any> = ({ data, tableColumns }) => {
+    const dispatch = UseDispatchHook()
     const { setIsEdit } = UseCompanyZutand()
     function handleEdit() {
         setIsEdit({ mode: 'edit', data: [data] })
     }
-  
-
+    const handleDeleteRecord = (deletedRecordId)=>{
+        dispatch(deleteCompany({type: 'delete', data: deletedRecordId}))
+    }
+    
     return (
         <tr className='hover:bg-gray-100 hover:border-x-1 ' >
             {tableColumns.map((column: any, idx: number) => (
@@ -25,7 +31,7 @@ export const TableRow: React.FC<any> = ({ data, tableColumns }) => {
             ))}
             <td className='flex gap-3 items-center  mt-2 md:mt-2'>
                 <label htmlFor="my-drawer-4" className="text-blue-400 cursor-pointer text-lg" onClick={() => handleEdit()} ><FaEdit /></label>
-                <label htmlFor="my_modal_6" className=" text-red-400 cursor-pointer text-lg"><MdDelete /></label>
+                <label htmlFor="my_modal_6" className=" text-red-400 cursor-pointer text-lg" onClick={()=> handleDeleteRecord(data.id)}><MdDelete /></label>
             </td>
             <td className=''>
                 <div className={`flex gap-3  ${tableColumns[0]?.columnName != "Company Name" ? "justify-center" : ""}`}>

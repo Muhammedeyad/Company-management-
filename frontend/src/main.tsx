@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthContextProvider>
         <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<div className='text-gray-900 h-screen flex items-center justify-center'><h1 className='text-2xl hidden'>loading, please wait...</h1></div>}>
+          <Suspense fallback={<div className='text-gray-900 h-screen flex items-center justify-center'><h1 className='text-2xl'>loading, please wait...</h1></div>}>
             <Provider store={store}>
               <App />
             </Provider>

@@ -22,6 +22,7 @@ export interface CompanyTableColumnType{
     fieldName: string
 }
 export interface CompanyTableDataType{
+    id: number,
     companyName: string,
     description: string,
     status: string

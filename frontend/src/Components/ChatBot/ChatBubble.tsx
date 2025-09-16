@@ -8,7 +8,7 @@ export const ChatBubble: React.FC<ChatType> = ({ theme, messages }) => {
 
     return (
 
-        <section className={`flex-1 h-full overflow-y-auto ${theme ? "bg-blue-100" : "bg-base-100"} px-5 md:px-10 py-4  relative md:mt-0 mt-25 `}>
+        <section className={`flex-1 h-full overflow-y-auto ${theme ? "bg-gray-100" : "bg-base-100"} px-5 md:px-10 py-4  relative md:mt-0 mt-25 `}>
 
             {messages?.length > 0 && messages?.map((message, idx) => (
                 <EnterAnimation><div key={idx} className={`chat ${message.position ? 'chat-end' : 'chat-start'} mb-11`}>

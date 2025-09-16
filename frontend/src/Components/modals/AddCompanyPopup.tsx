@@ -1,44 +1,111 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaPlus } from "react-icons/fa";
 import { UseCompanyZutand } from '../../zustand/CompanyAdminZustand';
+import { UseDispatchHook } from '../../hooks/CompanyAdmin/ReduxStoreHook/ReduxStoreHook';
+import { addCompany, editCompany } from '../../features/CompanyAdmin/TableFeatures/TableSlice';
+import { toast } from 'react-toastify';
 
 export const AddCompanyPopup: React.FC<{ title: string }> = ({ title }) => {
+    const dispatch = UseDispatchHook()
+    const { isEdit, setIsEdit } = UseCompanyZutand()
+    const [newRecord, setNewRecord] = useState({
+        id: 0,
+        companyName: "",
+        description: "",
+        status: ""
+    })
+    const closeRef = useRef(null)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, name } = e.target
+        setNewRecord({ ...newRecord, [name]: value })
+    }
 
-    const { isEdit } = UseCompanyZutand()
+
+    const createRecord = () => {
+        const { companyName, description, status } = newRecord
+        if (!companyName || !description || !status) {
+            toast.error('All feilds must be required!', {
+                position: 'top-right'
+            })
+            return
+        }
+        dispatch(addCompany({ type: 'add', data: [newRecord] }))
+        toast.success('Company added!', {
+            position: 'top-right'
+        })
+        setNewRecord({ companyName: "", description: "", status: "" })
+        closeRef.current?.click()
+    }
+
+    useEffect(() => {
+        if (isEdit.data?.length > 0) {
+            setNewRecord({
+                id: isEdit.data[0]?.id || 0,
+                companyName: isEdit.data[0]?.companyName || "",
+                description: isEdit.data[0]?.description || "",
+                status: isEdit.data[0]?.status || ""
+            })
+        }
+        if (isEdit.mode == 'add') {
+            setNewRecord({
+                id: 0,
+                companyName: "",
+                description: "",
+                status: ""
+            })
+        }
+    }, [isEdit.mode])
+
+
+    const updateCompanyRecord = () => {
+        dispatch(editCompany({ type: 'update', data: newRecord }))
+        toast.success('Company updated!', {
+            position: 'top-right'
+        })
+        closeRef.current?.click()
+    }
+
+
     return <div className=" drawer-end m-0 p-0 z-6">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
         </div>
         <div className="drawer-side">
-            <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
+            <label htmlFor="my-drawer-4" aria-label="close sidebar" onClick={() => setIsEdit([])} className="drawer-overlay"></label>
             <ul className=" bg-base-200 min-h-full w-90 relative">
                 {/* Sidebar content here */}
                 <section className='m-0 bg-blue-600 w-full py-5 px-4 text-white font-bold'>
-                    <h1 className='text-lg'>{isEdit.mode == 'edit'? title: 'Add Company'}</h1>
+                    <h1 className='text-lg'>{isEdit.mode == 'edit' ? title : 'Add Company'}</h1>
                 </section>
                 <section className='w-full flex justify-center flex-col'>
                     <section className='py-1 px-2 flex flex-col gap-6 mt-10'>
                         <section className='flex flex-col gap-1'>
                             <label htmlFor="" className='text-gray-600'>Company name</label>
-                            <input type="text" placeholder="Enter company name" className="input" />
+                            <input type="text" placeholder="Enter company name" className="input" name='companyName' onChange={(e) => handleChange(e)} value={newRecord.companyName} />
                         </section>
                         <section className='flex flex-col gap-1'>
-                            <label htmlFor="" className='text-gray-600'>Company Description</label> 
-                            <textarea name="" id="" className='textarea' placeholder='Enter description'></textarea>
+                            <label htmlFor="" className='text-gray-600' >Company Description</label>
+                            <textarea id="" className='textarea' placeholder='Enter description' name='description' onChange={(e) => handleChange(e)} value={newRecord.description}></textarea>
                         </section>
                         <section className='flex flex-col gap-1'>
                             <label htmlFor="" className='text-gray-600'>Status</label>
-                            <select name="" id="" className=' input cursor-pointer'>
+                            <select id="" className=' input cursor-pointer' name='status' onChange={(e) => handleChange(e)} value={newRecord.status}>
                                 <option value="" selected hidden>Select Status</option>
-                                <option value="">Active</option>
-                                <option value="">In Active</option>
+                                <option value="Active">Active</option>
+                                <option value="In Active">In Active</option>
                             </select>
                         </section>
 
                     </section>
                     <section className='flex  absolute bottom-4 right-6 gap-3'>
-                        <label className='btn w-1/2 border-1 border-gray-600' htmlFor="my-drawer-4" aria-label="close sidebar">Cancel</label>
-                        <button className='btn w-1/2 btn-primary'><FaPlus />{title == "Edit Company" ? "Update" : 'Create'}</button>
+                        <label ref={closeRef} className='btn w-1/2 border-1 border-gray-600' htmlFor="my-drawer-4" aria-label="close sidebar" onClick={() => setIsEdit([])}>Cancel</label>
+                        {isEdit.mode == "edit" ? (
+                            <button className='btn w-1/2 btn-primary' onClick={() => updateCompanyRecord()}>{isEdit.mode == "edit" ? "Update" : 'Create'}</button>
+                        ) : (
+                            <label  className='btn w-1/2 btn-primary' onClick={() => createRecord()}><FaPlus />Create</label>
+                        )}0
+
+
                     </section>
                 </section>
             </ul>

@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CompanyHeader } from '../../Layouts/CompanyAdmin/Header';
 import { AddCompanyPopup } from '../../Components/modals/AddCompanyPopup';
 import { InstanceTable } from '../../Components/Tables/InstanceTable';
 import { DeletePopUp } from '../../Components/modals/DeletePopUp';
 import type { InstanceTableDataType } from '../../types/CompanyAdmin/TableTypes';
 import { TableFilteration } from '../../features/CompanyAdmin/CommonTableFilteration/TableFilteration';
+import { UseDispatchHook, UseSelectorHook } from '../../hooks/CompanyAdmin/ReduxStoreHook/ReduxStoreHook';
+import { initialDataLoad } from '../../features/CompanyAdmin/TableFeatures/TableSlice';
+
 
 const CompanyIntances: React.FC = () => {
 	const [searchText, setSearchText] = useState<string>("")
@@ -13,12 +16,23 @@ const CompanyIntances: React.FC = () => {
 		{ columnName: "Instance Id", fieldName: 'instanceId' },
 		{ columnName: "Status", fieldName: 'status' },
 	]
+	const dispatch = UseDispatchHook()
+	const data = UseSelectorHook((state) => state.table)
 
-	const tableOneData = [
+	const [tableOneData, setTableOneData] = useState<InstanceTableDataType[]>([
 		{ instanceName: "Cy Ganderton", instanceId: '3433-343-34334', status: 'active' },
 		{ instanceName: "Ry Ganderton", instanceId: '3433-343-34334', status: 'active' },
 		{ instanceName: "Zy Ganderton", instanceId: '3433-343-34334', status: 'active' },
-	]
+	])
+	 
+	useEffect(()=>{
+		dispatch(initialDataLoad({type: 'initialLoad', data: tableOneData}))
+	}, [])
+	
+	useEffect(() => {
+		setTableOneData(data.data)
+	}, [data])
+
 	const [filteredCompanyData, setFilteredCompanyData] = useState<InstanceTableDataType[]>([])
 	const displayCompanyData = filteredCompanyData?.length > 0 || searchText.length > 0 ? filteredCompanyData : tableOneData
 

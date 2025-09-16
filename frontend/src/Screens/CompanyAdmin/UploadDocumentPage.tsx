@@ -19,7 +19,6 @@ const UploadDocumentPage: React.FC = () => {
     const dispatch = UseDispatchHook()
     const data = UseSelectorHook((state: { document: FileType[] }) => state.document)
 
-
     useEffect(() => {
         companyRef.current?.focus()
         setUploadedFiles(data)

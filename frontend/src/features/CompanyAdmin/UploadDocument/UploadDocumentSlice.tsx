@@ -11,7 +11,7 @@ const documentSlice = createSlice({
             files.map((item)=>{
                 state.push(item)
             })
-
+            return state
         },
         clearAllDocuments() {
                 
