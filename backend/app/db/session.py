@@ -7,8 +7,7 @@ engine=create_engine(DB_URL)
 LocalSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
-def get_db():
-   
+def get_db(): 
     try: 
         db=LocalSession()
         yield db
