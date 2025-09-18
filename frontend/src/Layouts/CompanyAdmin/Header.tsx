@@ -19,7 +19,7 @@ export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: s
         setIsEdit({ mode: "add", data: [] })
     }
     
-    console.log()
+
     return <section className={`bg-white p-3 sticky top-0 z-1  ${title != "Upload Documents" ? "py-5" : "py-3"} rounded`}>
         <section className='flex gap-3 items-center justify-between'>
             <div className='flex gap-2 justify-center items-center'>
@@ -27,7 +27,7 @@ export const CompanyHeader: React.FC<{ currentPage: string | undefined, title: s
                 <h4 className='text-black  text-xl font-bold'>{title || "Instance for company"}</h4>
             </div>
             <div>
-                <EnterAnimation>{currentPage == 'CompaniesPage' && <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={handleAdd}>Add Company</label>}</EnterAnimation>
+                <EnterAnimation>{currentPage == 'CompaniesPage' ? <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={handleAdd}>Add Company</label>: <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={handleAdd}>Add Instance</label>}</EnterAnimation>
             </div>
         </section>
         <section className='w-full mt-3'>

@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     ALG:str
     EXPIRES_MINUTES:int
     SECRET_KEY:str
+    CLIENT_URL:str
 
     class Config:
         env_file= '.env'

@@ -1,5 +1,6 @@
 from app.models.company_model import Company
 from fastapi import HTTPException
+from app.models.instance_model import Instance
 
 
 def get_allcompany_service(auth_user:dict, db):
@@ -51,8 +52,30 @@ def delete_company_service(auth_user:dict, db, id):
     try:
         logged_user = auth_user["data"]["userid"]
         deleted_company = db.query(Company).filter(Company.is_active== True, Company.company_id == id).first()
-        db.delete(deleted_company)
-        db.commit()
-        return {"message": "company deleted successfully!"}
+        company_instances = db.query(Instance).filter(Instance.company_id == id).all()
+        if(deleted_company):
+            deleted_company.is_active = 0
+            if(len(company_instances)> 0):
+                for instance in company_instances:
+                    instance.is_active= 0
+            db.commit()     
+            return {"message": "company deleted successfully!"}
+        return {"error": "No company found for this id!"}
     except Exception as e:
         raise HTTPException(status_code=401, detail=e)
+    
+
+
+
+
+    # def delete_company_service(auth_user:dict, db, id):
+    # try:
+    #     logged_user = auth_user["data"]["userid"]
+    #     deleted_company = db.query(Company).filter(Company.is_active== True, Company.company_id == id).first()
+    #     if(deleted_company):
+    #         db.delete(deleted_company)
+    #         db.commit()
+    #         return {"message": "company deleted successfully!"}
+    #     return {"error": "No company found for this id!"}
+    # except Exception as e:
+    #     raise HTTPException(status_code=401, detail=e)

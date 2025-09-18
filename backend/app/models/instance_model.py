@@ -4,10 +4,10 @@ from datetime import datetime
 from sqlalchemy.orm import relationship
 
 class Instance(Base):
-    __tablename__ = 'instance'
-    instance_id=Column(Integer, nullable=False, primary_key=True, default=datetime.utcnow())
+    __tablename__ = 'instance_master'
+    instance_id=Column(Integer, primary_key=True)
     instance_name= Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    status = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=False, default=1)
     created_at = Column(String, nullable=True, default=datetime.utcnow())
     created_by = Column(Integer, ForeignKey("user_master.user_id"))

@@ -7,15 +7,16 @@ from app.dependencies.verify_user import verify_user
 
 router = APIRouter()
 
+@router.get("/get")
+def get_all_company( auth_user = Depends(verify_user),  db:Session = Depends(get_db)):
+    all_companies = get_allcompany_service(auth_user, db)
+    return all_companies
+
+
 @router.post("/add")
 def add_company(company_data:CompanySchema, auth_user = Depends(verify_user),  db:Session = Depends(get_db)):
     new_company = add_company_service(company_data, auth_user, db)
     return new_company
-
-@router.get("/get")
-def add_company( auth_user = Depends(verify_user),  db:Session = Depends(get_db)):
-    all_companies = get_allcompany_service(auth_user, db)
-    return all_companies
 
 
 @router.put("/update/{id}")
